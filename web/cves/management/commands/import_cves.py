@@ -43,21 +43,23 @@ class Command(BaseCommand):
         cve_data = cve.get("opencve")
         if not cve_data:
             return
-
-        params = dict(
-            cve_data,
-            **{
-                "cve": cve["cve"],
-                "created": cve_data["created"]["data"],
-                "updated": cve_data["updated"]["data"],
-                "description": cve_data["description"]["data"],
-                "title": cve_data["title"]["data"],
-                "metrics": Json(cve_data["metrics"]),
-                "vendors": Json(cve_data["vendors"]["data"]),
-                "weaknesses": Json(cve_data["weaknesses"]["data"]),
-                "changes": Json([]),
-            },
-        )
+        try:
+            params = dict(
+                cve_data,
+                **{
+                    "cve": cve["cve"],
+                    "created": cve_data["created"]["data"],
+                    "updated": cve_data["updated"]["data"],
+                    "description": cve_data["description"]["data"],
+                    "title": cve_data["title"]["data"],
+                    "metrics": Json(cve_data["metrics"]),
+                    "vendors": Json(cve_data["vendors"]["data"]),
+                    "weaknesses": Json(cve_data["weaknesses"]["data"]),
+                    "changes": Json([]),
+                },
+            )
+        except Exception as e: 
+            return
         self.call_procedure(params)
 
     def handle(self, *args, **options):
